@@ -1,3 +1,5 @@
+import "server-only";
+
 const backendApi = process.env.BACKEND_API;
 if (!backendApi) {
   throw new Error("You must specify a BACKEND_API (StdBackendServer).");
