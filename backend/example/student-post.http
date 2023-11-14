@@ -1,0 +1,8 @@
+POST https://laravel-db.ddev.site/api/students
+Content-Type: application/json
+
+{
+    "name": "Pan",
+    "addr": "高雄市",
+    "birth": "2000-01-01"
+}
