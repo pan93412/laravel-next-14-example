@@ -107,6 +107,11 @@ function ModifiableStudentCell(
     setNewValue(undefined);
   };
 
+  const revokeResult = () => {
+    clearTimeout(timeout.current);
+    setNewValue(undefined);
+  };
+
   const newEditInterval = () => {
     clearTimeout(timeout.current);
     timeout.current = setTimeout(() => {
@@ -122,10 +127,16 @@ function ModifiableStudentCell(
           value={newValue}
           onInput={(event) => setNewValue(event.currentTarget.value)}
           onKeyUp={(event) => {
-            if (event.key === "Enter") {
-              commitResult();
-            } else {
-              newEditInterval();
+            switch (event.key) {
+              case "Enter":
+                commitResult();
+                break;
+              case "Escape":
+                revokeResult();
+                break;
+              default:
+                newEditInterval();
+                break;
             }
           }}
           onBlur={() => commitResult()}
