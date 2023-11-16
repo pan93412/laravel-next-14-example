@@ -1,7 +1,8 @@
 import z from "zod";
 
-export type StudentActions = z.infer<typeof StudentSchema>;
+export type Student = z.infer<typeof StudentSchema>;
 export const StudentSchema = z.object({
+  id: z.string(),
   name: z.string(),
   addr: z.string(),
   birth: z.string().pipe(z.coerce.date()),
@@ -14,4 +15,14 @@ export type StudentRequestDto = {
   name: string;
   addr: string;
   birth: string;
+};
+
+export type StudentDeleteDto = {
+  id: string;
+};
+
+export type StudentPUpdateDto = {
+  name?: string | undefined;
+  addr?: string | undefined;
+  birth?: string | undefined;
 };

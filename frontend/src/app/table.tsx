@@ -1,9 +1,10 @@
 "use client";
 
-import { createStudent } from "@/fetcher/student.actions";
-import type { StudentActions, StudentRequestDto, Students } from "@/fetcher/student.types";
-import { revalidateTag } from "next/cache";
-import React, { Dispatch, ReducerAction, useReducer, useState } from "react";
+import TocasButton from "@/components/tocas-button";
+import { createStudent, deleteStudent, partialUpdateStudent } from "@/fetcher/student.actions";
+import type { Student, StudentPUpdateDto, StudentRequestDto, Students } from "@/fetcher/student.types";
+import { useRouter } from "next/navigation";
+import React, { Dispatch, ReducerAction, useReducer, useRef, useState, useTransition } from "react";
 
 export function StudentTable({ data }: React.PropsWithoutRef<{
   data: Students;
@@ -21,7 +22,7 @@ export function StudentTable({ data }: React.PropsWithoutRef<{
         </tr>
       </thead>
       <tbody>
-        {data.map((row) => <StudentRow key={JSON.stringify(row)} data={row} />)}
+        {data.map((row) => <StudentRow key={row.id} data={row} />)}
         {showNewArea ? <NewStudentArea /> : null}
       </tbody>
       <tfoot>
@@ -40,14 +41,130 @@ export function StudentTable({ data }: React.PropsWithoutRef<{
   );
 }
 
-function StudentRow({ data }: React.PropsWithoutRef<{ data: StudentActions }>) {
+function StudentRow({ data }: React.PropsWithoutRef<{ data: Student }>) {
+  const [_, startTransition] = useTransition();
+  const router = useRouter();
+
+  const onModifiedBuilder = (key: keyof StudentPUpdateDto) => async (value: string) => {
+    try {
+      await partialUpdateStudent(data.id, {
+        [key]: value,
+      });
+
+      startTransition(router.refresh);
+    } catch (e) {
+      alert(e);
+    }
+  };
+
   return (
     <tr>
-      <td>{data.name}</td>
-      <td>{data.addr}</td>
-      <td>{data.birth.toISOString()}</td>
-      <td></td>
+      <td>
+        <ModifiableStudentCell
+          type="input"
+          onModified={onModifiedBuilder("name")}
+        >
+          {data.name}
+        </ModifiableStudentCell>
+      </td>
+      <td>
+        <ModifiableStudentCell
+          type="input"
+          onModified={onModifiedBuilder("addr")}
+        >
+          {data.addr}
+        </ModifiableStudentCell>
+      </td>
+      <td>
+        <ModifiableStudentCell
+          type="date"
+          onModified={onModifiedBuilder("birth")}
+        >
+          {data.birth.toISOString().substring(0, 10)}
+        </ModifiableStudentCell>
+      </td>
+      <td>
+        <DeleteButton id={data.id} />
+      </td>
     </tr>
+  );
+}
+
+function ModifiableStudentCell(
+  { children, type, onModified }: React.PropsWithoutRef<{
+    type: React.HTMLInputTypeAttribute;
+    children: string;
+    onModified?: (value: string) => void;
+  }>,
+) {
+  const [newValue, setNewValue] = useState<string>();
+  const timeout = useRef<string | number | NodeJS.Timeout>();
+
+  const commitResult = () => {
+    clearTimeout(timeout.current);
+
+    if (newValue) onModified?.(newValue);
+    setNewValue(undefined);
+  };
+
+  const newEditInterval = () => {
+    clearTimeout(timeout.current);
+    timeout.current = setTimeout(() => {
+      setNewValue(undefined);
+    }, 3000);
+  };
+
+  return (newValue != null)
+    ? (
+      <div className="ts-input">
+        <input
+          type={type}
+          value={newValue}
+          onInput={(event) => setNewValue(event.currentTarget.value)}
+          onKeyUp={(event) => {
+            if (event.key === "Enter") {
+              commitResult();
+            } else {
+              newEditInterval();
+            }
+          }}
+          onBlur={() => commitResult()}
+        />
+      </div>
+    )
+    : (
+      <div
+        onDoubleClick={() => {
+          setNewValue(children);
+          newEditInterval();
+        }}
+      >
+        {children}
+      </div>
+    );
+}
+
+function DeleteButton({ id }: React.PropsWithoutRef<{ id: string }>) {
+  const [isTransiting, startTransition] = useTransition();
+  const router = useRouter();
+
+  return (
+    <TocasButton
+      negative
+      loading={isTransiting}
+      onClick={() => {
+        startTransition(async () => {
+          try {
+            await deleteStudent({ id });
+            router.refresh();
+          } catch (e) {
+            alert("Failed to delete student: " + e);
+          }
+        });
+      }}
+    >
+      刪除
+    </TocasButton>
   );
 }
 
@@ -58,7 +175,8 @@ function NewStudentArea() {
     birth: "2000-01-01",
   } satisfies StudentFormState;
   const reducer = useReducer(studentReducer, initializer);
-  const [loading, setLoading] = useState(false);
+  const [isTransiting, startTransition] = useTransition();
+  const router = useRouter();
 
   return (
     <tr>
@@ -66,26 +184,24 @@ function NewStudentArea() {
       <EditableStudentCell k="addr" type="text" reducer={reducer} />
       <EditableStudentCell k="birth" type="date" reducer={reducer} />
       <td>
-        <button
-          className="ts-button"
+        <TocasButton
+          loading={isTransiting}
           onClick={async () => {
-            setLoading(true);
-
             const [state, action] = reducer;
 
-            try {
-              await createStudent(state);
-              action({ "type": "put", "content": initializer });
-              location.reload();
-            } catch (e) {
-              alert("Failed to create student: " + e);
-            } finally {
-              setLoading(false);
-            }
+            startTransition(async () => {
+              try {
+                await createStudent(state);
+                action({ "type": "put", "content": initializer });
+                router.refresh();
+              } catch (e) {
+                alert("Failed to create student: " + e);
+              }
+            });
           }}
         >
-          {loading ? <div className="ts-loading" /> : "新增"}
-        </button>
+          新增
+        </TocasButton>
       </td>
     </tr>
   );

@@ -1,12 +1,18 @@
 "use server";
 
 import api from "@/fetcher/endpoint";
-import { StudentActions, StudentRequestDto, Students, StudentSchema, StudentsSchema } from "@/fetcher/student.types";
+import {
+  Student,
+  StudentDeleteDto,
+  StudentPUpdateDto,
+  StudentRequestDto,
+  Students,
+  StudentSchema,
+  StudentsSchema,
+} from "@/fetcher/student.types";
 import { revalidateTag } from "next/cache";
 
 export async function getAllStudents(): Promise<Students> {
-  "use server";
-
   const response = await fetch(api("students"), {
     next: {
       tags: ["student"],
@@ -21,9 +27,7 @@ export async function getAllStudents(): Promise<Students> {
   return StudentsSchema.parse(json);
 }
 
-export async function createStudent(student: StudentRequestDto): Promise<StudentActions> {
-  "use server";
-
+export async function createStudent(student: StudentRequestDto): Promise<Student> {
   const response = await fetch(api("students"), {
     method: "POST",
     headers: {
@@ -39,4 +43,34 @@ export async function createStudent(student: StudentRequestDto): Promise<Student
   revalidateTag("student");
   const json = await response.json();
   return StudentSchema.parse(json);
+}
+
+export async function deleteStudent(student: StudentDeleteDto): Promise<void> {
+  const response = await fetch(api("students/" + student.id), {
+    method: "DELETE",
+  });
+  if (!response.ok) {
+    const raw = await response.text();
+    throw new Error(`Unable to delete student (${student.id}) due to (${response.status}) ${raw}`);
+  }
+
+  revalidateTag("student");
+}
+
+export async function partialUpdateStudent(id: string, student: StudentPUpdateDto): Promise<void> {
+  const body = JSON.stringify(student);
+
+  const response = await fetch(api("students/" + id), {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body,
+  });
+  if (!response.ok) {
+    const raw = await response.text();
+    throw new Error(`Unable to update student (${id} => ${body}) due to (${response.status}) ${raw}`);
+  }
+
+  revalidateTag("student");
 }
