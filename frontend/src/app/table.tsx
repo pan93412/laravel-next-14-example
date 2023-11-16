@@ -196,6 +196,7 @@ function NewStudentArea() {
       <EditableStudentCell k="birth" type="date" reducer={reducer} />
       <td>
         <TocasButton
+          tabIndex={0}
           loading={isTransiting}
           onClick={async () => {
             const [state, action] = reducer;
