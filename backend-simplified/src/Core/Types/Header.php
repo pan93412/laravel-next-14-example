@@ -2,6 +2,8 @@
 
 namespace Pan93412\StdBackend\Core\Types;
 
+use Generator;
+
 class Header
 {
     /**
@@ -51,10 +53,40 @@ class Header
 
     /**
      * @param string $key
+     * @param string $value
+     * @return void
+     */
+    function set(string $key, string $value): void
+    {
+        $this->rawHeader[Header::getNormalizedKey($key)] = $value;
+    }
+
+    /**
+     * @param string $key
      * @return bool
      */
     function isset(string $key): bool
     {
         return isset($this->rawHeader[Header::getNormalizedKey($key)]);
+    }
+
+    /**
+     * @param string $key
+     * @return void
+     */
+    function unset(string $key): void
+    {
+        unset($this->rawHeader[Header::getNormalizedKey($key)]);
+    }
+
+    /**
+     * Get the original headers map.
+     *
+     * It is immutable to the internal headers map.
+     *
+     * @return array<string, string>
+     */
+    function headers(): array {
+        return $this->rawHeader;
     }
 }

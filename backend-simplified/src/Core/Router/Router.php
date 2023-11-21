@@ -3,6 +3,8 @@
 namespace Pan93412\StdBackend\Core\Router;
 
 use Pan93412\StdBackend\Core\Controller\DefaultErrorHandler;
+use Pan93412\StdBackend\Core\Converter\JsonConverter;
+use Pan93412\StdBackend\Core\Converter\Converter;
 use Pan93412\StdBackend\Core\Types\Handler;
 use Pan93412\StdBackend\Core\Types\Request;
 use Pan93412\StdBackend\Core\Types\Response;
@@ -16,6 +18,13 @@ class Router
 
     protected Handler $globalErrorHandler;
 
+    /**
+     * @var array<string, Converter>
+     */
+    protected array $converters = [
+        JsonConverter::class,
+    ];
+
     public function __construct(?Handler $globalErrorHandler = null)
     {
         $this->globalErrorHandler = $globalErrorHandler ?? new DefaultErrorHandler();
@@ -26,7 +35,7 @@ class Router
         $this->handlers[$method][$path] = $handler;
     }
 
-    function request(Request $request, Response $response)
+    function request(Request $request, Response $response): void
     {
         $method = $request->method;
         $path = $request->path;
@@ -40,7 +49,21 @@ class Router
 
     protected function render(Response $response): void
     {
-        http_response_code($response->getStatus());
+        foreach ($this->converters as $converterClass) {
+            // Get converter.
+            $converter = new $converterClass();
+            $succeed = $converter->convert($response);
+
+            if ($succeed) {
+                break;
+            }
+        }
+
+        // Write to html.
+        header("HTTP/1.1 {$response->getStatus()}");
+        foreach ($response->getHeaders()->headers() as $key => $value) {
+            header("$key: $value");
+        }
         echo $response->getBody();
     }
 }

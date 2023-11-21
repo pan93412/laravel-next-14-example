@@ -70,12 +70,15 @@ class Response
     }
 
     /**
-     * @param Header $headers
-     * @return Response
+     * Set one-line header.
+     *
+     * @param string $key
+     * @param string $value
+     * @return $this
      */
-    public function headers(Header $headers): Response
+    public function header(string $key, string $value): Response
     {
-        $this->headers = $headers;
+        $this->headers->set($key, $value);
         return $this;
     }
 }
