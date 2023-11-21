@@ -1,0 +1,17 @@
+{
+    "name": "pan93412/std-backend",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Pan93412\\StdBackend\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "pan93412",
+            "email": "pan93412@gmail.com"
+        }
+    ],
+    "require": {}
+}
