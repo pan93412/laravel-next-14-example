@@ -3,10 +3,8 @@
 namespace Pan93412\StdBackend\Core\Router;
 
 use Exception;
-use Pan93412\StdBackend\Core\Controller\DefaultErrorHandler;
 use Pan93412\StdBackend\Core\Converter\JsonConverter;
 use Pan93412\StdBackend\Core\Converter\Converter;
-use Pan93412\StdBackend\Core\Types\Context;
 use Pan93412\StdBackend\Core\Types\Handler;
 use Pan93412\StdBackend\Core\Types\Request;
 use Pan93412\StdBackend\Core\Types\Response;
@@ -18,9 +16,6 @@ class Router
      * @var array<string, array<Handler>>
      */
     protected array $handlers;
-
-    protected Handler $globalErrorHandler;
-    protected Context $context;
 
     /**
      * @var array<string, Converter>
@@ -34,9 +29,8 @@ class Router
      */
     protected array $diContainer = [];
 
-    public function __construct(?Handler $globalErrorHandler = null)
+    public function __construct()
     {
-        $this->globalErrorHandler = $globalErrorHandler ?? new DefaultErrorHandler();
     }
 
     function addInjectable(object $value): void
@@ -47,8 +41,8 @@ class Router
     }
 
     /**
-     * @param string $method
-     * @param string $path
+     * @param string $method The method to catch. "*" Means all methods.
+     * @param string $path  The path to catch. "*" Means all paths.
      * @param class-string<Handler> $handler
      * @return void
      * @throws Exception
@@ -68,6 +62,10 @@ class Router
     {
         $reflection = new ReflectionClass($c);
         $constructor = $reflection->getConstructor();
+        if ($constructor === null) {
+            return $reflection->newInstance();
+        }
+
         $params = $constructor->getParameters();
 
         $args = [];
@@ -93,7 +91,9 @@ class Router
         $method = $request->method;
         $path = $request->path;
 
-        $handler = $this->handlers[$method][$path] ?? $this->globalErrorHandler;
+        $handler = $this->handlers[$method][$path]
+            ?? $this->handlers["*"][$path]
+            ?? $this->handlers["*"]["*"];
         $handler($request, $response);
 
         // Render the response.
