@@ -71,6 +71,7 @@ final class Database
      * @param Model $entity
      * @return void
      * @throws InvalidArgumentException
+     * @throws \PDOException
      */
     public function insert(mixed $entity): void
     {
