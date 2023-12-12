@@ -31,9 +31,6 @@ final class Database
             [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_PERSISTENT => true,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                PDO::ATTR_EMULATE_PREPARES => false,
-                PDO::ATTR_STRINGIFY_FETCHES => false,
             ]
         );
     }
@@ -56,7 +53,7 @@ final class Database
     {
         $tableName = $model::getTable();
 
-        $statement = $this->connection->prepare("SELECT * FROM {$tableName}");
+        $statement = $this->getConnection()->prepare("SELECT * FROM {$tableName}");
         $statement->execute();
 
         $resultRows = [];
@@ -79,9 +76,14 @@ final class Database
         $columns = $entity::getColumnNames();
         $values = $entity->getValues($columns);
 
-        $statement = $this->connection->prepare(
+        $statement = $this->getConnection()->prepare(
             "INSERT INTO {$tableName} (" . implode(", ", $columns) . ") VALUES (" . implode(", ", array_fill(0, count($columns), "?")) . ")"
         );
+
+//        try {
         $statement->execute(array_values($values));
+//        } catch (\Throwable $e) {
+//            echo($e);
+//        }
     }
 }
