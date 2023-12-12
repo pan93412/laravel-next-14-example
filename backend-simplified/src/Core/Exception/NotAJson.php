@@ -8,6 +8,6 @@ class NotAJson extends Exception
 {
     public function __construct()
     {
-        parent::__construct("Not a JSON.", 400);
+        parent::__construct("not a JSON", 400);
     }
 }
