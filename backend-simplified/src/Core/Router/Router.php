@@ -100,7 +100,7 @@ class Router
 
             // Render the response.
             $this->render($response);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             // fixme: customizable error handler
             $resp = new Response();
             $resp->status(is_numeric($e->getCode()) ? intval($e->getCode()) : 500);
