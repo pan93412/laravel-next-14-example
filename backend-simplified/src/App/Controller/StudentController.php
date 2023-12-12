@@ -17,7 +17,7 @@ class StudentController extends CrudHandler
     public function create(Request $request, Response $response): void
     {
         try {
-            $this->database->insert(StudentModel::class, $request->body);
+            $this->database->insert(StudentModel::class, $request->form());
             $response->status(201);
         } catch (\Exception $e) {
             $response->status(500)->setBody([
