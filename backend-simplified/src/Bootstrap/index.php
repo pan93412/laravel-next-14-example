@@ -20,9 +20,5 @@ $database = new Database(
     "db",
 );
 
-try {
-    $router = new WebRouter($database);
-    $router->request($request, $response);
-} catch (\Exception $e) {
-    die($e);
-}
+$router = new WebRouter($database);
+$router->request($request, $response);
