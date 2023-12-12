@@ -8,6 +8,7 @@ use Pan93412\StdBackend\Core\Exception\MissingField;
 use Pan93412\StdBackend\Core\Types\CrudHandler;
 use Pan93412\StdBackend\Core\Types\Request;
 use Pan93412\StdBackend\Core\Types\Response;
+use PDOException;
 
 class StudentController extends CrudHandler
 {
@@ -17,6 +18,7 @@ class StudentController extends CrudHandler
 
     /**
      * @throws MissingField
+     * @throws PDOException
      */
     public function create(Request $request, Response $response): void
     {
