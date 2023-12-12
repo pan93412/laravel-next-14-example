@@ -4,6 +4,7 @@ namespace Pan93412\StdBackend\App\Controller;
 
 use Pan93412\StdBackend\App\Models\StudentModel;
 use Pan93412\StdBackend\Core\Database\Database;
+use Pan93412\StdBackend\Core\Exception\MissingField;
 use Pan93412\StdBackend\Core\Types\CrudHandler;
 use Pan93412\StdBackend\Core\Types\Request;
 use Pan93412\StdBackend\Core\Types\Response;
@@ -14,16 +15,21 @@ class StudentController extends CrudHandler
     {
     }
 
+    /**
+     * @throws MissingField
+     */
     public function create(Request $request, Response $response): void
     {
-        try {
-            $this->database->insert(StudentModel::class, $request->form());
-            $response->status(201);
-        } catch (\Exception $e) {
-            $response->status(500)->setBody([
-                "error" => $e->getMessage()
-            ]);
-        }
+        $form = $request->form();
+        $entity = new StudentModel();
+
+        $entity->name = $form["name"] ?? throw new MissingField("name");
+        $entity->email = $form["email"] ?? throw new MissingField("email");
+        $entity->grade = isset($form["grade"]) ? intval($form["grade"]) : throw new MissingField("grade");
+        $entity->birthday = $form["birthday"] ?? throw new MissingField("birthday");
+
+        $this->database->insert($entity);
+        $response->status(201);
     }
 
     public function retrieve(Request $request, Response $response): void

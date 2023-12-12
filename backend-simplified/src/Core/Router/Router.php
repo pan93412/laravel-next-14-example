@@ -42,7 +42,7 @@ class Router
 
     /**
      * @param string $method The method to catch. "*" Means all methods.
-     * @param string $path  The path to catch. "*" Means all paths.
+     * @param string $path The path to catch. "*" Means all paths.
      * @param class-string<Handler> $handler
      * @return void
      * @throws Exception
@@ -103,8 +103,12 @@ class Router
         } catch (\Exception $e) {
             // fixme: customizable error handler
             $resp = new Response();
-            $resp->status($e->getCode());
-            $resp->body($e->getMessage());
+            $resp->status(is_numeric($e->getCode()) ? intval($e->getCode()) : 500);
+            $resp->body([
+                "error" => $e::class,
+                "message" => $e->getMessage(),
+                "file" => $e->getFile() . ":" . $e->getLine(),
+            ]);
             $this->render($resp);
         }
     }

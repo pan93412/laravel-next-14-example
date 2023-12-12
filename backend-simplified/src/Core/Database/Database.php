@@ -31,7 +31,7 @@ final class Database
             [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_PERSISTENT => true,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_CLASS,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
                 PDO::ATTR_EMULATE_PREPARES => false,
                 PDO::ATTR_STRINGIFY_FETCHES => false,
             ]
@@ -58,32 +58,29 @@ final class Database
 
         $statement = $this->connection->prepare("SELECT * FROM {$tableName}");
         $statement->execute();
-        return $statement->fetchAll();
+
+        $resultRows = [];
+        while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+            $resultRows[] = $model::fromMap($row);
+        }
+
+        return $resultRows;
     }
 
     /**
-     * @template T of Model
-     * @param class-string<T> $model
-     * @param array<string, mixed> $values
+     * @param Model $entity
      * @return void
      * @throws InvalidArgumentException
      */
-    public function insert(string $model, array $values): void
+    public function insert(mixed $entity): void
     {
-        $tableName = $model::getTable();
-        $columns = $model::getColumnNames();
-
-        // Check if all the columns are present
-        foreach ($values as $key => $value) {
-            if (!in_array($key, $columns)) {
-                throw new InvalidArgumentException("Column {$key} does not exist in table {$tableName}");
-            }
-        }
+        $tableName = $entity::getTable();
+        $columns = $entity::getColumnNames();
+        $values = $entity->getValues($columns);
 
         $statement = $this->connection->prepare(
             "INSERT INTO {$tableName} (" . implode(", ", $columns) . ") VALUES (" . implode(", ", array_fill(0, count($columns), "?")) . ")"
         );
-
         $statement->execute(array_values($values));
     }
 }
