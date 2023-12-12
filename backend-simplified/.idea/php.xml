@@ -10,6 +10,11 @@
     <option name="highlightLevel" value="WARNING" />
     <option name="transferred" value="true" />
   </component>
+  <component name="PhpIncludePathManager">
+    <include_path>
+      <path value="$PROJECT_DIR$/vendor/composer" />
+    </include_path>
+  </component>
   <component name="PhpInterpreters">
     <interpreters>
       <interpreter id="afbdd8f6-08d3-49b7-ac19-522613b7effe" name="DDEV" home="docker-compose://DATA" auto="false" debugger_id="php.debugger.XDebug">

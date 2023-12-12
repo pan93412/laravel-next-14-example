@@ -8,7 +8,7 @@ use Pan93412\StdBackend\Core\Types\Response;
 
 class InfoController implements Handler
 {
-    #[\Override] public function handle(Request $request, Response $response): void
+    #[\Override] public function __invoke(Request $request, Response $response): void
     {
         $response->body([
             "method" => $request->method,

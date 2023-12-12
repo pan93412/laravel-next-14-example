@@ -30,7 +30,7 @@ class Router
         $this->globalErrorHandler = $globalErrorHandler ?? new DefaultErrorHandler();
     }
 
-    function register(string $method, string $path, $handler): void
+    function register(string $method, string $path, Handler $handler): void
     {
         $this->handlers[$method][$path] = $handler;
     }
@@ -41,7 +41,7 @@ class Router
         $path = $request->path;
 
         $handler = $this->handlers[$method][$path] ?? $this->globalErrorHandler;
-        $handler->handle($request, $response);
+        $handler($request, $response);
 
         // Render the response.
         $this->render($response);
