@@ -94,10 +94,19 @@ class Router
         $handler = $this->handlers[$method][$path]
             ?? $this->handlers["*"][$path]
             ?? $this->handlers["*"]["*"];
-        $handler($request, $response);
 
-        // Render the response.
-        $this->render($response);
+        try {
+            $handler($request, $response);
+
+            // Render the response.
+            $this->render($response);
+        } catch (\Exception $e) {
+            // fixme: customizable error handler
+            $resp = new Response();
+            $resp->status($e->getCode());
+            $resp->body($e->getMessage());
+            $this->render($resp);
+        }
     }
 
     protected function render(Response $response): void
