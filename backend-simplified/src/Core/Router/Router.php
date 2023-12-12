@@ -2,12 +2,15 @@
 
 namespace Pan93412\StdBackend\Core\Router;
 
+use Exception;
 use Pan93412\StdBackend\Core\Controller\DefaultErrorHandler;
 use Pan93412\StdBackend\Core\Converter\JsonConverter;
 use Pan93412\StdBackend\Core\Converter\Converter;
+use Pan93412\StdBackend\Core\Types\Context;
 use Pan93412\StdBackend\Core\Types\Handler;
 use Pan93412\StdBackend\Core\Types\Request;
 use Pan93412\StdBackend\Core\Types\Response;
+use ReflectionClass;
 
 class Router
 {
@@ -17,6 +20,7 @@ class Router
     protected array $handlers;
 
     protected Handler $globalErrorHandler;
+    protected Context $context;
 
     /**
      * @var array<string, Converter>
@@ -25,14 +29,63 @@ class Router
         JsonConverter::class,
     ];
 
+    /**
+     * @var array<class-string, object>
+     */
+    protected array $diContainer = [];
+
     public function __construct(?Handler $globalErrorHandler = null)
     {
         $this->globalErrorHandler = $globalErrorHandler ?? new DefaultErrorHandler();
     }
 
-    function register(string $method, string $path, Handler $handler): void
+    function addInjectable(object $value): void
     {
-        $this->handlers[$method][$path] = $handler;
+        $r = new \ReflectionObject($value);
+        $n = $r->getName();
+        $this->diContainer[$n] = $value;
+    }
+
+    /**
+     * @param string $method
+     * @param string $path
+     * @param class-string<Handler> $handler
+     * @return void
+     * @throws Exception
+     */
+    function register(string $method, string $path, string $handler): void
+    {
+        $this->handlers[$method][$path] = $this->createInjectedInstance($handler);
+    }
+
+    /**
+     * @template T
+     * @param class-string<T> $c
+     * @return T
+     * @throws Exception
+     */
+    protected function createInjectedInstance(string $c): object
+    {
+        $reflection = new ReflectionClass($c);
+        $constructor = $reflection->getConstructor();
+        $params = $constructor->getParameters();
+
+        $args = [];
+        foreach ($params as $param) {
+            $type = $param->getType();
+            if ($type === null) {
+                throw new Exception("Cannot resolve type of parameter {$param->getName()} in {$c}");
+            }
+
+            $type = $type->getName();
+            if (!isset($this->diContainer[$type])) {
+                throw new Exception("Cannot resolve type {$type} in {$c}");
+            }
+
+            $args[] = $this->diContainer[$type];
+        }
+
+        return $reflection->newInstanceArgs($args);
     }
 
     function request(Request $request, Response $response): void
