@@ -2,6 +2,9 @@
 
 namespace Pan93412\StdBackend\Core\Types;
 
+use JsonException;
+use Pan93412\StdBackend\Core\Exception\NotAJson;
+
 class Request
 {
     /**
@@ -47,18 +50,19 @@ class Request
     }
 
     /**
-     * @param string $body
-     * @return string|mixed
+     * @return mixed
+     * @throws JsonException
+     * @throws NotAJson
      */
-    private function parseBody(string $body): mixed
+    public function json(): mixed
     {
         $contentType = $this->headers->get("Content-Type");
 
         if (str_contains($contentType, "application/json")) {
-            return json_decode($body, true);
+            return json_decode($this->body, true, flags: JSON_THROW_ON_ERROR);
         }
 
-        return $body;
+        throw new NotAJson();
     }
 }
 
