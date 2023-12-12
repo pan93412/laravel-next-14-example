@@ -20,5 +20,9 @@ $database = new Database(
     "db",
 );
 
-$router = new WebRouter($database);
-$router->request($request, $response);
+try {
+    $router = new WebRouter($database);
+    $router->request($request, $response);
+} catch (\Throwable $e) {
+    echo "unexpected error: " . $e;
+}
