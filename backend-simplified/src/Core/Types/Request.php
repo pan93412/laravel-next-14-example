@@ -50,6 +50,21 @@ class Request
     }
 
     /**
+     * @return array<string, string | array<string>>
+     */
+    public function form(): array
+    {
+        $contentType = $this->headers->get("Content-Type");
+        $result = [];
+
+        if (str_contains($contentType, "application/x-www-form-urlencoded")) {
+            parse_str($this->body, $result);
+        }
+
+        return $result;
+    }
+
+    /**
      * @return mixed
      * @throws JsonException
      * @throws NotAJson
