@@ -18,7 +18,7 @@ abstract class Model
         // otherwise, we use the property name.
         foreach ($r->getProperties() as $property) {
             $attrs = $property->getAttributes(FieldName::class);
-            if ($attrs[0]) {
+            if (isset($attrs[0])) {
                 $cols[] = $attrs[0]->newInstance()->getName();
             } else {
                 $cols[] = $property->getName();
