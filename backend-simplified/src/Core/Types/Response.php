@@ -5,13 +5,13 @@ namespace Pan93412\StdBackend\Core\Types;
 class Response
 {
     private mixed $body;
-    private int $status;
+    private ?int $status;
     private Header $headers;
 
     public function __construct()
     {
         $this->body = null;
-        $this->status = 200;
+        $this->status = null;
         $this->headers = new Header();
     }
 
@@ -22,7 +22,9 @@ class Response
 
     public function getStatus(): int
     {
-        return $this->status;
+        return $this->status ?? (
+            is_null($this->body) ? 204 : 200
+        );
     }
 
     public function getHeader(string $key): string
