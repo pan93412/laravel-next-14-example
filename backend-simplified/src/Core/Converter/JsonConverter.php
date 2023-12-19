@@ -14,7 +14,7 @@ class JsonConverter implements Converter
         // If the response is a primitive type (string, number, boolean, null),
         // and the content type is not set, we must not touch it.
         if (is_scalar($response->getBody()) &&
-            $response->getHeaders()->get("Content-Type") !== "application/json") {
+            $response->getHeader("Content-Type") !== "application/json") {
             return false;
         }
 

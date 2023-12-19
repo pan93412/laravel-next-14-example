@@ -25,31 +25,19 @@ class Response
         return $this->status;
     }
 
-    public function getHeaders(): Header
+    public function getHeader(string $key): string
     {
-        return $this->headers;
-    }
-
-    public function setBody(mixed $body): void
-    {
-        $this->body = $body;
-    }
-
-    public function setStatus(int $status): void
-    {
-        $this->status = $status;
+        return $this->headers->get($key);
     }
 
     /**
-     * @param Header $headers
-     * @return void
+     * @returns array<string, string>
      */
-    public function setHeaders(Header $headers): void
+    public function getHeaders(): array
     {
-        $this->headers = $headers;
+        return $this->headers->headers();
     }
 
-    /* region: fluent */
     /**
      * @param mixed $body
      * @return Response

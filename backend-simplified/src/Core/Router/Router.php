@@ -127,7 +127,7 @@ class Router
 
         // Write to html.
         header("HTTP/1.1 {$response->getStatus()}");
-        foreach ($response->getHeaders()->headers() as $key => $value) {
+        foreach ($response->getHeaders() as $key => $value) {
             header("$key: $value");
         }
         echo $response->getBody();

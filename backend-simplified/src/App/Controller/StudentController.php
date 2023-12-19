@@ -36,7 +36,7 @@ class StudentController extends CrudHandler
 
     public function retrieve(Request $request, Response $response): void
     {
-        $response->setBody(
+        $response->body(
             $this->database->selectAll(StudentModel::class)
         );
     }
