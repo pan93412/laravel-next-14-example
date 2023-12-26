@@ -138,6 +138,11 @@ final class Database
         $columnValueMap = [];
 
         foreach ($entity::getColumnsMeta() as $column) {
+            if (!$column->reflectionProperty()->isInitialized($entity)) {
+                if ($column->implicit()) continue;
+                throw new InvalidArgumentException("Property {$column->propertyName()} is not initialized.");
+            }
+
             $columnValueMap[$column->columnName()] = $column->reflectionProperty()->getValue($entity);
         }
         $statement = $this->getConnection()->prepare(
