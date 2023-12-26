@@ -2,6 +2,7 @@
 
 namespace Pan93412\StdBackend\Routes;
 
+use Pan93412\StdBackend\App\Controller\EmployeeController;
 use Pan93412\StdBackend\App\Controller\HelloWorldController;
 use Pan93412\StdBackend\App\Controller\InfoController;
 use Pan93412\StdBackend\App\Controller\StudentController;
@@ -21,5 +22,6 @@ class WebRouter extends Router {
         $this->register("GET", "/", HelloWorldController::class);
         $this->register("GET", "/info", InfoController::class);
         $this->register("*", "/students", StudentController::class);
+        $this->register("*", "/employees", EmployeeController::class);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Pan93412\StdBackend\App\Models;
 
-use Pan93412\StdBackend\Core\Database\FieldName;
+use Pan93412\StdBackend\Core\Database\ColumnName;
 use Pan93412\StdBackend\Core\Database\Model;
 
 class RoleModel extends Model

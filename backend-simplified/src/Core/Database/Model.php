@@ -12,6 +12,23 @@ abstract class Model
     }
 
     /**
+     * @return array<string, Field> The key is the property name; the value is the Field object.
+     */
+    public static function getColumnsMeta(): array
+    {
+        $r = new \ReflectionClass(static::class);
+        $cols = [];
+
+        foreach ($r->getProperties() as $property) {
+            $field = Field::fromReflectionProperty($property);
+            $cols[$field->propertyName] = $field;
+        }
+
+        return $cols;
+    }
+
+    /**
+     * @deprecated
      * @return array<string, ReflectionProperty>
      */
     public static function getColumns(): array
@@ -22,7 +39,7 @@ abstract class Model
         // If users specified `#[FieldName]`, we use it;
         // otherwise, we use the property name.
         foreach ($r->getProperties() as $property) {
-            $attrs = $property->getAttributes(FieldName::class);
+            $attrs = $property->getAttributes(ColumnName::class);
             $key = $property->getName();
             if (isset($attrs[0])) {
                 $key = $attrs[0]->newInstance()->getName();

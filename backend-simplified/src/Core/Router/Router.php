@@ -103,7 +103,7 @@ class Router
         } catch (\Throwable $e) {
             // fixme: customizable error handler
             $resp = new Response();
-            $resp->status(is_numeric($e->getCode()) ? intval($e->getCode()) : 500);
+            $resp->status($e->getCode());
             $resp->body([
                 "error" => $e::class,
                 "message" => $e->getMessage(),
@@ -125,7 +125,7 @@ class Router
             }
         }
 
-        header("HTTP/1.1 {$response->getStatus()}");
+        http_response_code($response->getStatus());
         foreach ($response->getHeaders() as $key => $value) {
             header("$key: $value");
         }

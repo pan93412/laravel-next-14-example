@@ -55,7 +55,9 @@ class Response
      */
     public function status(int $status): Response
     {
-        $this->status = $status;
+        if ($status < 100 || $status > 599) {
+            $this->status = 500;
+        }
         return $this;
     }
 
