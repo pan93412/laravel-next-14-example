@@ -2,86 +2,72 @@
 
 namespace Pan93412\StdBackend\Core\Database;
 
+use Exception;
+use ReflectionClass;
 use ReflectionProperty;
 
 abstract class Model
 {
     abstract public static function getTable(): string;
-    public static function getIdField(): string {
-        return "id";
-    }
 
     /**
-     * @return array<string, Field> The key is the property name; the value is the Field object.
+     * Get the {@see FieldMetadata} metadata of this model.
+     *
+     * @return array<string, FieldMetadata> The key is the property name; the value is the Field object.
      */
     public static function getColumnsMeta(): array
     {
-        $r = new \ReflectionClass(static::class);
+        $r = new ReflectionClass(static::class);
         $cols = [];
 
         foreach ($r->getProperties() as $property) {
-            $field = Field::fromReflectionProperty($property);
-            $cols[$field->propertyName] = $field;
+            $field = FieldMetadata::fromReflectionProperty($property);
+            $cols[$field->propertyName()] = $field;
         }
 
         return $cols;
     }
 
     /**
-     * @deprecated
-     * @return array<string, ReflectionProperty>
+     * @throws Exception
      */
-    public static function getColumns(): array
-    {
-        $r = new \ReflectionClass(static::class);
-        $cols = [];
-
-        // If users specified `#[FieldName]`, we use it;
-        // otherwise, we use the property name.
-        foreach ($r->getProperties() as $property) {
-            $attrs = $property->getAttributes(ColumnName::class);
-            $key = $property->getName();
-            if (isset($attrs[0])) {
-                $key = $attrs[0]->newInstance()->getName();
+    public static function getPrimaryKey(): FieldMetadata {
+        $columns = static::getColumnsMeta();
+        foreach ($columns as $column) {
+            if ($column->primary()) {
+                return $column;
             }
-
-            $cols[$key] = $property;
         }
-
-        return $cols;
+        throw new Exception("No primary key found.");
     }
 
+    /**
+     * Turn the `FETCH_ASSOC` array into a model.
+     *
+     * @param array<string, mixed> $data
+     * @return self
+     */
     public static function fromMap(array $data): self
     {
         $model = new static();
 
-        $columns = static::getColumns();
+        // Create a map of column name => reflection_property
+        /** @var array<string, ReflectionProperty> $fields */
+        $fields = [];
+        foreach (static::getColumnsMeta() as $field) {
+            $fields[$field->columnName()] = $field->reflectionProperty();
+        }
+
         foreach ($data as $key => $value) {
-            if (isset($columns[$key])) {
-                $columns[$key]->setValue($model, $value);
+            $field = $fields[$key] ?? null;
+            if ($field === null) {
+                error_log("Column $key not found in model " . static::class, E_WARNING);
+                continue;
             }
+
+            $field->setValue($model, $value);
         }
 
         return $model;
-    }
-
-    /**
-     * @return array<string>
-     */
-    public static function getColumnNames(): array
-    {
-        return array_keys(static::getColumns());
-    }
-
-    /**
-     * @param array<string> $columns
-     * @return array
-     */
-    public function getValues(array $columns): array {
-        $values = [];
-        foreach ($columns as $column) {
-            $values[] = $this->{$column};
-        }
-        return $values;
     }
 }

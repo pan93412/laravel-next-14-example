@@ -2,9 +2,10 @@
 
 namespace Pan93412\StdBackend\Core\Database;
 
+use Exception;
 use InvalidArgumentException;
 use PDO;
-use PDOStatement;
+use PDOException;
 
 final class Database
 {
@@ -25,7 +26,7 @@ final class Database
     public function connect(): void
     {
         $this->connection = new PDO(
-            "mysql:host={$this->host};port={$this->port};dbname={$this->database};charset={$this->charset}",
+            "mysql:host=$this->host;port=$this->port;dbname=$this->database;charset=$this->charset",
             $this->username,
             $this->password,
             [
@@ -53,7 +54,7 @@ final class Database
     {
         $tableName = $model::getTable();
 
-        $statement = $this->getConnection()->prepare("SELECT * FROM {$tableName}");
+        $statement = $this->getConnection()->prepare("SELECT * FROM $tableName");
         $statement->execute();
 
         $resultRows = [];
@@ -69,13 +70,14 @@ final class Database
      * @param class-string<T> $model
      * @param string $id
      * @return array<T>
+     * @throws Exception
      */
     public function select(string $model, string $id): array
     {
         $tableName = $model::getTable();
-        $idField = $model::getIdField();
+        $idField = $model::getPrimaryKey()->columnName();
 
-        $statement = $this->getConnection()->prepare("SELECT * FROM {$tableName} WHERE {$idField} = ?");
+        $statement = $this->getConnection()->prepare("SELECT * FROM $tableName WHERE $idField = ?");
         $statement->execute([$id]);
 
         $resultRows = [];
@@ -92,14 +94,15 @@ final class Database
      * @param string $id
      * @param array<string, mixed> $set
      * @return void
+     * @throws Exception
      */
     public function update(string $model, string $id, array $set): void
     {
         $tableName = $model::getTable();
-        $idField = $model::getIdField();
+        $idField = $model::getPrimaryKey()->columnName();
 
         $statement = $this->getConnection()->prepare(
-            "UPDATE {$tableName} SET". implode(", ", array_map(fn($column) => " {$column} = :{$column}", array_keys($set))) . " WHERE {$idField} = :{$idField}"
+            "UPDATE $tableName SET". implode(", ", array_map(fn($column) => " $column = :$column", array_keys($set))) . " WHERE $idField = :$idField"
         );
         $statement->execute(array_merge($set, [$idField => $id]));
     }
@@ -109,13 +112,14 @@ final class Database
      * @param class-string<T> $model
      * @param string $id
      * @return void
+     * @throws Exception
      */
     public function delete(string $model, string $id): void
     {
         $tableName = $model::getTable();
-        $idField = $model::getIdField();
+        $idField = $model::getPrimaryKey()->columnName();
 
-        $statement = $this->getConnection()->prepare("DELETE FROM {$tableName} WHERE {$idField} = ?");
+        $statement = $this->getConnection()->prepare("DELETE FROM $tableName WHERE $idField = ?");
         $statement->execute([$id]);
     }
 
@@ -123,17 +127,22 @@ final class Database
      * @param Model $entity
      * @return void
      * @throws InvalidArgumentException
-     * @throws \PDOException
+     * @throws PDOException
      */
     public function insert(mixed $entity): void
     {
         $tableName = $entity::getTable();
-        $columns = $entity::getColumnNames();
-        $values = $entity->getValues($columns);
 
+        // column name -> entity value
+        /** @var array<string, string> $columnValueMap */
+        $columnValueMap = [];
+
+        foreach ($entity::getColumnsMeta() as $column) {
+            $columnValueMap[$column->columnName()] = $column->reflectionProperty()->getValue($entity);
+        }
         $statement = $this->getConnection()->prepare(
-            "INSERT INTO {$tableName} (" . implode(", ", $columns) . ") VALUES (" . implode(", ", array_fill(0, count($columns), "?")) . ")"
+            "INSERT INTO $tableName (" . implode(", ", array_keys($columnValueMap)) . ") VALUES (" . implode(", ", array_fill(0, count($columnValueMap), "?")) . ")"
         );
-        $statement->execute(array_values($values));
+        $statement->execute(array_values($columnValueMap));
     }
 }

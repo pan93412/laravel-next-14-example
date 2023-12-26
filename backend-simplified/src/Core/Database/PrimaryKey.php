@@ -7,8 +7,7 @@ use Attribute;
 /**
  * Declare that this value is a primary key.
  *
- * It is usually the `id` column. If you do not
- * declare PrimaryKey, `id` is.
+ * It is usually the `id` column.
  */
 #[Attribute]
 readonly class PrimaryKey

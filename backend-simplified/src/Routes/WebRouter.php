@@ -2,6 +2,7 @@
 
 namespace Pan93412\StdBackend\Routes;
 
+use Exception;
 use Pan93412\StdBackend\App\Controller\EmployeeController;
 use Pan93412\StdBackend\App\Controller\HelloWorldController;
 use Pan93412\StdBackend\App\Controller\InfoController;
@@ -12,7 +13,7 @@ use Pan93412\StdBackend\Core\Router\Router;
 
 class WebRouter extends Router {
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     function __construct(Database $database)
     {
