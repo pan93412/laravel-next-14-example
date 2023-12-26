@@ -18,7 +18,7 @@ class Router
     protected array $handlers;
 
     /**
-     * @var array<string, Converter>
+     * @var array<string, class-string<Converter>>
      */
     protected array $converters = [
         JsonConverter::class,
@@ -125,11 +125,15 @@ class Router
             }
         }
 
-        // Write to html.
         header("HTTP/1.1 {$response->getStatus()}");
         foreach ($response->getHeaders() as $key => $value) {
             header("$key: $value");
         }
-        echo $response->getBody();
+
+        $body = $response->getBody();
+        if (!$body) {
+            return;
+        }
+        echo $body;
     }
 }

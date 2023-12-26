@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS suppliers (
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    name TEXT NOT NULL,
+    contact TEXT,
+    phone TEXT NOT NULL,
+    address TEXT NOT NULL UNIQUE
+)

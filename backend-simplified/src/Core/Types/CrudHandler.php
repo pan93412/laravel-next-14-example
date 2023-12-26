@@ -6,6 +6,7 @@ abstract class CrudHandler implements Handler
 {
     abstract public function create(Request $request, Response $response): void;
     abstract public function retrieve(Request $request, Response $response): void;
+    abstract public function retrieveOne(Request $request, Response $response, string $id): void;
     abstract public function update(Request $request, Response $response): void;
     abstract public function delete(Request $request, Response $response): void;
 
@@ -13,7 +14,13 @@ abstract class CrudHandler implements Handler
     {
         switch ($request->method) {
             case "GET":
-                $this->retrieve($request, $response);
+                $id = $request->query["id"] ?? null;
+
+                if ($id != null) {
+                    $this->retrieveOne($request, $response, $id);
+                } else {
+                    $this->retrieve($request, $response);
+                }
                 break;
             case "POST":
                 $this->create($request, $response);

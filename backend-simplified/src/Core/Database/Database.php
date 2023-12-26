@@ -65,6 +65,61 @@ final class Database
     }
 
     /**
+     * @template T of Model
+     * @param class-string<T> $model
+     * @param string $id
+     * @return array<T>
+     */
+    public function select(string $model, string $id): array
+    {
+        $tableName = $model::getTable();
+        $idField = $model::getIdField();
+
+        $statement = $this->getConnection()->prepare("SELECT * FROM {$tableName} WHERE {$idField} = ?");
+        $statement->execute([$id]);
+
+        $resultRows = [];
+        while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+            $resultRows[] = $model::fromMap($row);
+        }
+
+        return $resultRows;
+    }
+
+    /**
+     * @template T of Model
+     * @param class-string<T> $model
+     * @param string $id
+     * @param array<string, mixed> $set
+     * @return void
+     */
+    public function update(string $model, string $id, array $set): void
+    {
+        $tableName = $model::getTable();
+        $idField = $model::getIdField();
+
+        $statement = $this->getConnection()->prepare(
+            "UPDATE {$tableName} SET". implode(", ", array_map(fn($column) => " {$column} = :{$column}", array_keys($set))) . " WHERE {$idField} = :{$idField}"
+        );
+        $statement->execute(array_merge($set, [$idField => $id]));
+    }
+
+    /**
+     * @template T of Model
+     * @param class-string<T> $model
+     * @param string $id
+     * @return void
+     */
+    public function delete(string $model, string $id): void
+    {
+        $tableName = $model::getTable();
+        $idField = $model::getIdField();
+
+        $statement = $this->getConnection()->prepare("DELETE FROM {$tableName} WHERE {$idField} = ?");
+        $statement->execute([$id]);
+    }
+
+    /**
      * @param Model $entity
      * @return void
      * @throws InvalidArgumentException
@@ -79,11 +134,6 @@ final class Database
         $statement = $this->getConnection()->prepare(
             "INSERT INTO {$tableName} (" . implode(", ", $columns) . ") VALUES (" . implode(", ", array_fill(0, count($columns), "?")) . ")"
         );
-
-//        try {
         $statement->execute(array_values($values));
-//        } catch (\Throwable $e) {
-//            echo($e);
-//        }
     }
 }

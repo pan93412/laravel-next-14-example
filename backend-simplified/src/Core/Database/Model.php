@@ -7,6 +7,9 @@ use ReflectionProperty;
 abstract class Model
 {
     abstract public static function getTable(): string;
+    public static function getIdField(): string {
+        return "id";
+    }
 
     /**
      * @return array<string, ReflectionProperty>
