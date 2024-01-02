@@ -21,6 +21,9 @@ abstract class MagicCrudHandler extends CrudHandler
     {
     }
 
+    /**
+     * @throws Exception
+     */
     public function create(Request $request, Response $response): void
     {
         $form = $request->form();
@@ -32,8 +35,9 @@ abstract class MagicCrudHandler extends CrudHandler
             $value = $meta->pickValue($form);
 
             // if this column is implicit, we allow skipping it
-            if ($meta->implicit()) {
-                continue;
+            if (is_null($value)) {
+                if ($meta->implicit()) continue;
+                throw new Exception("Missing field: {$meta->columnName()}", 400);
             }
 
             $meta->reflectionProperty()->setValue($entity, $value);

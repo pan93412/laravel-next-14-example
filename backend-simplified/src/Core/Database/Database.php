@@ -69,10 +69,10 @@ final class Database
      * @template T of Model
      * @param class-string<T> $model
      * @param string $id
-     * @return array<T>
+     * @return ?T
      * @throws Exception
      */
-    public function select(string $model, string $id): array
+    public function select(string $model, string $id): ?object
     {
         $tableName = $model::getTable();
         $idField = $model::getPrimaryKey()->columnName();
@@ -80,12 +80,12 @@ final class Database
         $statement = $this->getConnection()->prepare("SELECT * FROM $tableName WHERE $idField = ?");
         $statement->execute([$id]);
 
-        $resultRows = [];
-        while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-            $resultRows[] = $model::fromMap($row);
+        $row = $statement->fetch(PDO::FETCH_ASSOC);
+        if ($row !== false) {
+            return $model::fromMap($row);
         }
 
-        return $resultRows;
+        return null;
     }
 
     /**

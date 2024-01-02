@@ -61,7 +61,7 @@ abstract class Model
         foreach ($data as $key => $value) {
             $field = $fields[$key] ?? null;
             if ($field === null) {
-                error_log("Column $key not found in model " . static::class, E_WARNING);
+                error_log("Column $key not found in model " . static::class);
                 continue;
             }
 

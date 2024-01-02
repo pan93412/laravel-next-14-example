@@ -27,7 +27,7 @@ class Response
         );
     }
 
-    public function getHeader(string $key): string
+    public function getHeader(string $key): ?string
     {
         return $this->headers->get($key);
     }

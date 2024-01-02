@@ -12,10 +12,7 @@ use ReflectionClass;
 
 class Router
 {
-    /**
-     * @var array<string, array<Handler>>
-     */
-    protected array $handlers;
+    protected PatternTree $patternTree;
 
     /**
      * @var array<string, class-string<Converter>>
@@ -31,6 +28,7 @@ class Router
 
     public function __construct()
     {
+        $this->patternTree = new PatternTree();
     }
 
     function addInjectable(object $value): void
@@ -42,14 +40,14 @@ class Router
 
     /**
      * @param string $method The method to catch. "*" Means all methods.
-     * @param string $path The path to catch. "*" Means all paths.
+     * @param string $pathPattern The path to catch.
      * @param class-string<Handler> $handler
      * @return void
      * @throws Exception
      */
-    function register(string $method, string $path, string $handler): void
+    function register(string $method, string $pathPattern, string $handler): void
     {
-        $this->handlers[$method][$path] = $this->createInjectedInstance($handler);
+        $this->patternTree->add($method, $pathPattern, $this->createInjectedInstance($handler));
     }
 
     /**
@@ -91,9 +89,12 @@ class Router
         $method = $request->method;
         $path = $request->path;
 
-        $handler = $this->handlers[$method][$path]
-            ?? $this->handlers["*"][$path]
-            ?? $this->handlers["*"]["*"];
+        $handler = $this->patternTree->find($method, $path);
+        if ($handler === null) {
+            $response->status(404);
+            $this->render($response);
+            return;
+        }
 
         try {
             $handler($request, $response);
