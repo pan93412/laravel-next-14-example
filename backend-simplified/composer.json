@@ -29,6 +29,7 @@
         "php": ">=8.3",
         "pan93412/magical": "*",
         "pan93412/magical-extra": "*",
-        "ext-pdo": "*"
+        "ext-pdo": "*",
+        "ext-pdo_mysql": "*"
     }
 }
