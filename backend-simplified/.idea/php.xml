@@ -15,6 +15,9 @@
       <path value="$PROJECT_DIR$/vendor/composer" />
       <path value="$PROJECT_DIR$/vendor/pan93412/magical-extra" />
       <path value="$PROJECT_DIR$/vendor/pan93412/magical" />
+      <path value="$PROJECT_DIR$/framework/vendor/composer" />
+      <path value="$PROJECT_DIR$/framework-extra/vendor/pan93412/magical" />
+      <path value="$PROJECT_DIR$/framework-extra/vendor/composer" />
     </include_path>
   </component>
   <component name="PhpInterpreters">

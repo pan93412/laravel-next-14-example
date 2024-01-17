@@ -2,12 +2,15 @@
 <module type="WEB_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/spec" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/framework-extra/src" isTestSource="false" packagePrefix="Pan93412\MagicalExtra\" />
+      <sourceFolder url="file://$MODULE_DIR$/framework/src" isTestSource="false" packagePrefix="Pan93412\Magical\" />
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" packagePrefix="Pan93412\Backend\" />
-      <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/composer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/pan93412/magical" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/pan93412/magical-extra" />
+      <excludeFolder url="file://$MODULE_DIR$/framework-extra/vendor/composer" />
+      <excludeFolder url="file://$MODULE_DIR$/framework-extra/vendor/pan93412/magical" />
+      <excludeFolder url="file://$MODULE_DIR$/framework/vendor/composer" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
