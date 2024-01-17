@@ -1,66 +1,60 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Magical example
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Magical 框架是我在 MVC 課程上課時，根據 Laravel 和老師的教學，自己寫的一個簡單 MVC 框架，目前只有實作出 MVC 的部分。
 
-## About Laravel
+## 實作功能
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- [x] 請求／回傳的 convenient methods
+  - [x] 支援 Form Data (application/x-www-form-urlencoded)
+  - [x] 支援 JSON (application/json)
+  - [x] 支援回傳 HTTP 狀態碼
+  - [x] 支援自訂 HTTP header
+- [x] 路由器
+  - [x] RESTful API (支援 `PUT`, `DELETE` 等)
+  - [x] 樹狀路由 (支援 `/a/b/*/c`)
+  - [x] 支援錯誤處理 (fallback)
+  - [x] 支援回傳內容自動轉換 (PHP object 成 JSON)
+    - Converter
+- [x] NGINX 路徑轉址
+- [x] MVC-native
+  - [x] 有 Model 概念（見 ORM）
+    - [x] 支援 Model 自動轉換成符合 RESTful 規範的 Controller
+  - [x] 有 Controller 概念 (Abstract method)
+- [x] ORM
+  - [x] 以 PDO 為基礎的 ORM 操作 class
+  - [x] 原生提供 Model 概念
+    - [x] 允許自訂 ColumnName
+    - [x] 允許設定非必填值 (Implicit Value)
+    - [x] 允許標記 Primary Key
+  - [x] 自動推斷 schema (by reflection)
+    - [x] 支援對 Model 進行 CRUD（而不需要撰寫任何 SQL statement） 
+    - [ ] 手動 Migration（你需要從 migrations 裡面自行 create table）
+    - [ ] 自動 Migration（從 Model 推斷 create 語句）
+  - [ ] 支援 Model 關聯
+- [ ] 支援 Stateful Session
+  - [ ] 支援 CSRF
+  - [ ] 支援 Session
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 架構
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- `framework`：`Pan93412/Magical` 核心程式碼
+  - `src`
+    - `Converter`：內建的 Response 轉換器 (又稱 Transformer)
+      - 目前支援 JSON 的轉換。
+    - `Database`：內建的 ORM
+    - `Exception`：這個框架裡面的 Exceptions
+    - `Router`：樹狀路由
+    - `Types`：Request、Response 等基礎物件
+- `framework-extra`：`Pan93412/MagicalExtra` 擴充部分
+  - `src`
+    - `Controller/BasicNotFoundHandler`：非常基本的 404 頁面
+    - `Handlers/MagicCrudHandler`：opinionated 的 Model → CRUD handler
+- `src`：業務部分
+  - `Controller`：Employee, Product, Role, Supplier, Student 以及 Info, HelloWorld
+  - `Model`：Employee, Product, Role, Supplier, Student
+  - `Bootstrap`：啟動 WebRouter 進行 handle
+  - `WebRouter`：面對這個 application 的 router definition
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+MIT
