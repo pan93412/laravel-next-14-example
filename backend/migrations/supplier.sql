@@ -3,5 +3,5 @@ CREATE TABLE IF NOT EXISTS suppliers (
     name TEXT NOT NULL,
     contact TEXT,
     phone TEXT NOT NULL,
-    address TEXT NOT NULL UNIQUE
+    address VARCHAR(512) NOT NULL UNIQUE
 )
