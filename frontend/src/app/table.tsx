@@ -70,7 +70,7 @@ function StudentRow({ data }: React.PropsWithoutRef<{ data: Student }>) {
       </td>
       <td>
         <ModifiableStudentCell
-          type="input"
+          type="email"
           onModified={onModifiedBuilder("email")}
         >
           {data.email}
@@ -202,7 +202,7 @@ function NewStudentArea() {
   return (
     <tr>
       <EditableStudentCell k="name" type="text" reducer={reducer} />
-      <EditableStudentCell k="email" type="text" reducer={reducer} />
+      <EditableStudentCell k="email" type="email" reducer={reducer} />
       <EditableStudentCell k="grade" type="number" reducer={reducer} />
       <EditableStudentCell k="birthday" type="date" reducer={reducer} />
       <td>

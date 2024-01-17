@@ -26,12 +26,14 @@ export async function getAllStudents(): Promise<Students> {
 }
 
 export async function createStudent(student: StudentRequestDto): Promise<void> {
+  const formData = new FormData();
+  for (const [key, value] of Object.entries(student)) {
+    formData.append(key, value.toString());
+  }
+
   const response = await fetch(api("students"), {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(student),
+    body: formData,
   });
   if (!response.ok) {
     const raw = await response.text();
@@ -53,14 +55,16 @@ export async function deleteStudent(student: StudentDeleteDto): Promise<void> {
   revalidateTag("student");
 }
 
+// broken
 export async function partialUpdateStudent(id: number, student: StudentPUpdateDto): Promise<void> {
-  const body = JSON.stringify(student);
+  const body = new FormData();
+  body.append("id", id.toString());
+  for (const [key, value] of Object.entries(student)) {
+    body.append(key, value.toString());
+  }
 
-  const response = await fetch(api("students?id=" + id), {
+  const response = await fetch(api("students"), {
     method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body,
   });
   if (!response.ok) {

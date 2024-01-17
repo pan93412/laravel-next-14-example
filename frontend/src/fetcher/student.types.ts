@@ -4,7 +4,7 @@ export type Student = z.infer<typeof StudentSchema>;
 export const StudentSchema = z.object({
   id: z.number(),
   name: z.string(),
-  email: z.string().email(),
+  email: z.string(),
   grade: z.number(),
   birthday: z.string().pipe(z.coerce.date()),
 });
