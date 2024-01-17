@@ -1,11 +1,12 @@
 <?php
 
-namespace Pan93412\StdBackend\Bootstrap;
+namespace Pan93412\Backend\Bootstrap;
 
-use Pan93412\StdBackend\Core\Database\Database;
-use Pan93412\StdBackend\Core\Types\Request;
-use Pan93412\StdBackend\Core\Types\Response;
-use Pan93412\StdBackend\Routes\WebRouter;
+use Pan93412\Magical\Database\Database;
+use Pan93412\Magical\Types\Request;
+use Pan93412\Magical\Types\Response;
+use Pan93412\Backend\Routes\WebRouter;
+use Throwable;
 
 class App {
     static function run(): void
@@ -25,7 +26,7 @@ class App {
         try {
             $router = new WebRouter($database);
             $router->request($request, $response);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             echo "unexpected error: " . $e;
         }
     }

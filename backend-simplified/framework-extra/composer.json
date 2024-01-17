@@ -1,0 +1,26 @@
+{
+    "name": "pan93412/magical-extra",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Pan93412\\MagicalExtra\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "pan93412",
+            "email": "pan93412@gmail.com"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../framework"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "pan93412/magical": "*"
+    }
+}

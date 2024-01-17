@@ -1,10 +1,10 @@
 <?php
 
-namespace Pan93412\StdBackend\App\Controller;
+namespace Pan93412\Backend\App\Controller;
 
-use Pan93412\StdBackend\App\Models\EmployeeModel;
-use Pan93412\StdBackend\Core\Database\Model;
-use Pan93412\StdBackend\Extra\MagicCrudHandler;
+use Pan93412\Backend\App\Models\EmployeeModel;
+use Pan93412\Magical\Database\Model;
+use Pan93412\MagicalExtra\Handlers\MagicCrudHandler;
 
 class EmployeeController extends MagicCrudHandler
 {

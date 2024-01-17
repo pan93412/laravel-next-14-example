@@ -1,19 +1,34 @@
 {
-    "name": "pan93412/std-backend",
+    "name": "pan93412/backend",
+    "description": "A basic application written with Magical framework.",
     "type": "project",
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Pan93412\\StdBackend\\": "src/"
+            "Pan93412\\Backend\\": "src/"
         }
     },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "./framework"
+        },
+        {
+            "type": "path",
+            "url": "./framework-extra"
+        }
+    ],
     "authors": [
         {
             "name": "pan93412",
             "email": "pan93412@gmail.com"
         }
     ],
+    "minimum-stability": "dev",
     "require": {
-      "ext-pdo": "*"
+        "php": ">=8.3",
+        "pan93412/magical": "*",
+        "pan93412/magical-extra": "*",
+        "ext-pdo": "*"
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace Pan93412\StdBackend\App\Models;
+namespace Pan93412\Backend\App\Models;
 
-use Pan93412\StdBackend\Core\Database\Model;
+use Pan93412\Magical\Database\Model;
 
 class StudentModel extends Model
 {

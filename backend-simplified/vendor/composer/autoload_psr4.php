@@ -6,5 +6,7 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Pan93412\\StdBackend\\' => array($baseDir . '/src'),
+    'Pan93412\\Magical\\' => array($vendorDir . '/pan93412/magical/src'),
+    'Pan93412\\MagicalExtra\\' => array($vendorDir . '/pan93412/magical-extra/src'),
+    'Pan93412\\Backend\\' => array($baseDir . '/src'),
 );

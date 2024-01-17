@@ -1,0 +1,41 @@
+{
+    "packages": [
+        {
+            "name": "pan93412/magical",
+            "version": "dev-master",
+            "version_normalized": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "../framework",
+                "reference": "54b812126bf5b9b9323c09c33dd2b27b0ef8af62"
+            },
+            "require": {
+                "ext-pdo": "*",
+                "ext-pdo_mysql": "*"
+            },
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Pan93412\\Magical\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "pan93412",
+                    "email": "pan93412@gmail.com"
+                }
+            ],
+            "description": "Magical is a basic framework but with a lot of reflection magic.",
+            "transport-options": {
+                "relative": true
+            },
+            "install-path": "../pan93412/magical"
+        }
+    ],
+    "dev": true,
+    "dev-package-names": []
+}

@@ -9,12 +9,22 @@ class ComposerStaticInit750f91c385f1c294ef546f58ddce063d
     public static $prefixLengthsPsr4 = array (
         'P' => 
         array (
-            'Pan93412\\StdBackend\\' => 20,
+            'Pan93412\\Magical\\' => 17,
+            'Pan93412\\MagicalExtra\\' => 22,
+            'Pan93412\\Backend\\' => 17,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'Pan93412\\StdBackend\\' => 
+        'Pan93412\\Magical\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/pan93412/magical/src',
+        ),
+        'Pan93412\\MagicalExtra\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/pan93412/magical-extra/src',
+        ),
+        'Pan93412\\Backend\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
         ),

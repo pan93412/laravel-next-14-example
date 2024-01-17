@@ -1,18 +1,18 @@
 <?php
 
-namespace Pan93412\StdBackend\Routes;
+namespace Pan93412\Backend\Routes;
 
 use Exception;
-use Pan93412\StdBackend\App\Controller\EmployeeController;
-use Pan93412\StdBackend\App\Controller\HelloWorldController;
-use Pan93412\StdBackend\App\Controller\InfoController;
-use Pan93412\StdBackend\App\Controller\ProductController;
-use Pan93412\StdBackend\App\Controller\RoleController;
-use Pan93412\StdBackend\App\Controller\StudentController;
-use Pan93412\StdBackend\App\Controller\SupplierController;
-use Pan93412\StdBackend\Core\Controller\DefaultErrorHandler;
-use Pan93412\StdBackend\Core\Database\Database;
-use Pan93412\StdBackend\Core\Router\Router;
+use Pan93412\Backend\App\Controller\EmployeeController;
+use Pan93412\Backend\App\Controller\HelloWorldController;
+use Pan93412\Backend\App\Controller\InfoController;
+use Pan93412\Backend\App\Controller\ProductController;
+use Pan93412\Backend\App\Controller\RoleController;
+use Pan93412\Backend\App\Controller\StudentController;
+use Pan93412\Backend\App\Controller\SupplierController;
+use Pan93412\Magical\Controller\DefaultErrorHandler;
+use Pan93412\Magical\Database\Database;
+use Pan93412\Magical\Router\Router;
 
 class WebRouter extends Router {
     /**

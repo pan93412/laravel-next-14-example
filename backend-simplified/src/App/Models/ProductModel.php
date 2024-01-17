@@ -1,11 +1,10 @@
 <?php
 
-namespace Pan93412\StdBackend\App\Models;
+namespace Pan93412\Backend\App\Models;
 
-use Pan93412\StdBackend\Core\Database\ColumnName;
-use Pan93412\StdBackend\Core\Database\ImplicitValue;
-use Pan93412\StdBackend\Core\Database\Model;
-use Pan93412\StdBackend\Core\Database\PrimaryKey;
+use Pan93412\Magical\Database\ImplicitValue;
+use Pan93412\Magical\Database\Model;
+use Pan93412\Magical\Database\PrimaryKey;
 
 class ProductModel extends Model
 {

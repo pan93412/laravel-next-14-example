@@ -4,16 +4,79 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d2f1cba9d18e5d00e75812d1bcba9de4",
-    "packages": [],
+    "content-hash": "5a896515598b5acc7d643ff24bb35dd6",
+    "packages": [
+        {
+            "name": "pan93412/magical",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "./framework",
+                "reference": "249507d45aa85a318999c2cf77d09fb231841296"
+            },
+            "require": {
+                "ext-pdo": "*",
+                "ext-pdo_mysql": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Pan93412\\Magical\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "pan93412",
+                    "email": "pan93412@gmail.com"
+                }
+            ],
+            "description": "Magical is a basic framework but with a lot of reflection magic.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "pan93412/magical-extra",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "./framework-extra",
+                "reference": "12b866c4e848bc961da55de9791a82ab629674e2"
+            },
+            "require": {
+                "pan93412/magical": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Pan93412\\MagicalExtra\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "pan93412",
+                    "email": "pan93412@gmail.com"
+                }
+            ],
+            "transport-options": {
+                "relative": true
+            }
+        }
+    ],
     "packages-dev": [],
     "aliases": [],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "ext-pdo": "*"
+        "php": ">=8.3"
     },
     "platform-dev": [],
     "plugin-api-version": "2.6.0"

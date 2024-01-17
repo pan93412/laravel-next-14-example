@@ -1,5 +1,74 @@
 {
-    "packages": [],
+    "packages": [
+        {
+            "name": "pan93412/magical",
+            "version": "dev-master",
+            "version_normalized": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "./framework",
+                "reference": "249507d45aa85a318999c2cf77d09fb231841296"
+            },
+            "require": {
+                "ext-pdo": "*",
+                "ext-pdo_mysql": "*"
+            },
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Pan93412\\Magical\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "pan93412",
+                    "email": "pan93412@gmail.com"
+                }
+            ],
+            "description": "Magical is a basic framework but with a lot of reflection magic.",
+            "transport-options": {
+                "relative": true
+            },
+            "install-path": "../pan93412/magical"
+        },
+        {
+            "name": "pan93412/magical-extra",
+            "version": "dev-master",
+            "version_normalized": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "./framework-extra",
+                "reference": "12b866c4e848bc961da55de9791a82ab629674e2"
+            },
+            "require": {
+                "pan93412/magical": "*"
+            },
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Pan93412\\MagicalExtra\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "pan93412",
+                    "email": "pan93412@gmail.com"
+                }
+            ],
+            "transport-options": {
+                "relative": true
+            },
+            "install-path": "../pan93412/magical-extra"
+        }
+    ],
     "dev": true,
     "dev-package-names": []
 }

@@ -1,21 +1,39 @@
 <?php return array(
     'root' => array(
-        'name' => 'pan93412/std-backend',
+        'name' => 'pan93412/backend',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => 'd65ddb338e648b0e316eb20766ec6e5b113af518',
+        'reference' => 'a5dcb1a077d03ad7ecd14e778149330dd2fd8582',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
         'dev' => true,
     ),
     'versions' => array(
-        'pan93412/std-backend' => array(
+        'pan93412/backend' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => 'd65ddb338e648b0e316eb20766ec6e5b113af518',
+            'reference' => 'a5dcb1a077d03ad7ecd14e778149330dd2fd8582',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'pan93412/magical' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => '249507d45aa85a318999c2cf77d09fb231841296',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../pan93412/magical',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'pan93412/magical-extra' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => '12b866c4e848bc961da55de9791a82ab629674e2',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../pan93412/magical-extra',
             'aliases' => array(),
             'dev_requirement' => false,
         ),

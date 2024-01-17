@@ -1,0 +1,22 @@
+{
+    "name": "pan93412/magical",
+    "description": "Magical is a basic framework but with a lot of reflection magic.",
+    "type": "library",
+    "require": {
+        "ext-pdo": "*",
+        "ext-pdo_mysql": "*"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Pan93412\\Magical\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "pan93412",
+            "email": "pan93412@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev"
+}
