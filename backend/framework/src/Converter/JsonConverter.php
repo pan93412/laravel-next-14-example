@@ -18,7 +18,7 @@ class JsonConverter implements Converter
             return false;
         }
 
-        if (!$response->getBody()) {
+        if (is_null($response->getBody())) {
             return true; /* leave it as 'null' */
         }
 
