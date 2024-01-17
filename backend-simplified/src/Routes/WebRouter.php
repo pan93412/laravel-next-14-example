@@ -10,9 +10,9 @@ use Pan93412\Backend\App\Controller\ProductController;
 use Pan93412\Backend\App\Controller\RoleController;
 use Pan93412\Backend\App\Controller\StudentController;
 use Pan93412\Backend\App\Controller\SupplierController;
-use Pan93412\Magical\Controller\DefaultErrorHandler;
 use Pan93412\Magical\Database\Database;
 use Pan93412\Magical\Router\Router;
+use Pan93412\MagicalExtra\Controller\BasicErrorHandler;
 
 class WebRouter extends Router {
     /**
@@ -22,7 +22,7 @@ class WebRouter extends Router {
     {
         parent::__construct();
         $this->addInjectable($database);
-        $this->register("*", "*", DefaultErrorHandler::class);
+        $this->register("*", "*", BasicErrorHandler::class);
         $this->register("GET", "/", HelloWorldController::class);
         $this->register("GET", "/info", InfoController::class);
         $this->register("*", "/students/*?", StudentController::class);

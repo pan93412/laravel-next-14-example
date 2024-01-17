@@ -1,12 +1,12 @@
 <?php
 
-namespace Pan93412\Magical\Controller;
+namespace Pan93412\MagicalExtra\Controller;
 
 use Pan93412\Magical\Types\Handler;
 use Pan93412\Magical\Types\Request;
 use Pan93412\Magical\Types\Response;
 
-class DefaultErrorHandler implements Handler
+class BasicErrorHandler implements Handler
 {
     public function __invoke(Request $request, Response $response): void
     {
