@@ -106,7 +106,7 @@ class Router
         } catch (Throwable $e) {
             // fixme: customizable error handler
             $resp = new Response();
-            $resp->status($e->getCode());
+            $resp->status(500);
             $resp->body([
                 "error" => $e::class,
                 "message" => $e->getMessage(),

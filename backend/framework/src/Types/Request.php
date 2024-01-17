@@ -61,6 +61,10 @@ class Request
             parse_str($this->body, $result);
         }
 
+        if (str_contains($contentType, "multipart/form-data")) {
+            $result = $_POST;
+        }
+
         return $result;
     }
 
