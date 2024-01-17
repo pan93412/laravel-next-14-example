@@ -18,6 +18,10 @@ class JsonConverter implements Converter
             return false;
         }
 
+        if (!$response->getBody()) {
+            return true; /* leave it as 'null' */
+        }
+
         $encodedResult = json_encode($response->getBody());
         if ($encodedResult === false) {
             return false;
