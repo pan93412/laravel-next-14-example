@@ -2,12 +2,10 @@
 
 import api from "@/fetcher/endpoint";
 import {
-  Student,
   StudentDeleteDto,
   StudentPUpdateDto,
   StudentRequestDto,
   Students,
-  StudentSchema,
   StudentsSchema,
 } from "@/fetcher/student.types";
 import { revalidateTag } from "next/cache";
@@ -27,7 +25,7 @@ export async function getAllStudents(): Promise<Students> {
   return StudentsSchema.parse(json);
 }
 
-export async function createStudent(student: StudentRequestDto): Promise<Student> {
+export async function createStudent(student: StudentRequestDto): Promise<void> {
   const response = await fetch(api("students"), {
     method: "POST",
     headers: {
@@ -41,12 +39,10 @@ export async function createStudent(student: StudentRequestDto): Promise<Student
   }
 
   revalidateTag("student");
-  const json = await response.json();
-  return StudentSchema.parse(json);
 }
 
 export async function deleteStudent(student: StudentDeleteDto): Promise<void> {
-  const response = await fetch(api("students/" + student.id), {
+  const response = await fetch(api("students?id=" + student.id), {
     method: "DELETE",
   });
   if (!response.ok) {
@@ -57,11 +53,11 @@ export async function deleteStudent(student: StudentDeleteDto): Promise<void> {
   revalidateTag("student");
 }
 
-export async function partialUpdateStudent(id: string, student: StudentPUpdateDto): Promise<void> {
+export async function partialUpdateStudent(id: number, student: StudentPUpdateDto): Promise<void> {
   const body = JSON.stringify(student);
 
-  const response = await fetch(api("students/" + id), {
-    method: "PUT",
+  const response = await fetch(api("students?id=" + id), {
+    method: "PATCH",
     headers: {
       "Content-Type": "application/json",
     },

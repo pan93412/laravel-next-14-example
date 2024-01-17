@@ -16,7 +16,8 @@ export function StudentTable({ data }: React.PropsWithoutRef<{
       <thead>
         <tr>
           <th>姓名</th>
-          <th>地址</th>
+          <th>電子郵件</th>
+          <th>年級</th>
           <th>生日</th>
           <th>編輯</th>
         </tr>
@@ -27,7 +28,7 @@ export function StudentTable({ data }: React.PropsWithoutRef<{
       </tbody>
       <tfoot>
         <tr>
-          <th colSpan={4}>
+          <th colSpan={5}>
             <button
               className="ts-button"
               onClick={() => setShowNewArea(v => !v)}
@@ -70,17 +71,25 @@ function StudentRow({ data }: React.PropsWithoutRef<{ data: Student }>) {
       <td>
         <ModifiableStudentCell
           type="input"
-          onModified={onModifiedBuilder("addr")}
+          onModified={onModifiedBuilder("email")}
         >
-          {data.addr}
+          {data.email}
+        </ModifiableStudentCell>
+      </td>
+      <td>
+        <ModifiableStudentCell
+          type="number"
+          onModified={onModifiedBuilder("grade")}
+        >
+          {data.grade.toString()}
         </ModifiableStudentCell>
       </td>
       <td>
         <ModifiableStudentCell
           type="date"
-          onModified={onModifiedBuilder("birth")}
+          onModified={onModifiedBuilder("birthday")}
         >
-          {data.birth.toISOString().substring(0, 10)}
+          {data.birthday.toISOString().substring(0, 10)}
         </ModifiableStudentCell>
       </td>
       <td>
@@ -155,7 +164,7 @@ function ModifiableStudentCell(
     );
 }
 
-function DeleteButton({ id }: React.PropsWithoutRef<{ id: string }>) {
+function DeleteButton({ id }: React.PropsWithoutRef<{ id: number }>) {
   const [isTransiting, startTransition] = useTransition();
   const router = useRouter();
 
@@ -182,8 +191,9 @@ function DeleteButton({ id }: React.PropsWithoutRef<{ id: string }>) {
 function NewStudentArea() {
   const initializer = {
     name: "",
-    addr: "",
-    birth: "2000-01-01",
+    email: "",
+    grade: 0,
+    birthday: "",
   } satisfies StudentFormState;
   const reducer = useReducer(studentReducer, initializer);
   const [isTransiting, startTransition] = useTransition();
@@ -192,8 +202,9 @@ function NewStudentArea() {
   return (
     <tr>
       <EditableStudentCell k="name" type="text" reducer={reducer} />
-      <EditableStudentCell k="addr" type="text" reducer={reducer} />
-      <EditableStudentCell k="birth" type="date" reducer={reducer} />
+      <EditableStudentCell k="email" type="text" reducer={reducer} />
+      <EditableStudentCell k="grade" type="number" reducer={reducer} />
+      <EditableStudentCell k="birthday" type="date" reducer={reducer} />
       <td>
         <TocasButton
           tabIndex={0}
