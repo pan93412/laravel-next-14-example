@@ -43,8 +43,10 @@ abstract class MagicCrudHandler extends CrudHandler
             $meta->reflectionProperty()->setValue($entity, $value);
         }
 
-        $this->database->insert($entity);
-        $response->status(201);
+        $id = $this->database->insert($entity);
+
+        $response->status(201)
+                 ->body(["id" => $id]);
     }
 
     public function retrieve(Request $request, Response $response): void

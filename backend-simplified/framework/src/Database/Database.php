@@ -125,13 +125,14 @@ final class Database
 
     /**
      * @param Model $entity
-     * @return void
+     * @return string The inserted ID.
      * @throws InvalidArgumentException
      * @throws PDOException
      */
-    public function insert(mixed $entity): void
+    public function insert(mixed $entity): string
     {
         $tableName = $entity::getTable();
+        $idField = $entity::getPrimaryKey()->columnName();
 
         // column name -> entity value
         /** @var array<string, string> $columnValueMap */
@@ -149,5 +150,7 @@ final class Database
             "INSERT INTO $tableName (" . implode(", ", array_keys($columnValueMap)) . ") VALUES (" . implode(", ", array_fill(0, count($columnValueMap), "?")) . ")"
         );
         $statement->execute(array_values($columnValueMap));
+
+        return $this->getConnection()->lastInsertId();
     }
 }
