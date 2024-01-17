@@ -17,10 +17,11 @@ class App {
         $response = new Response();
 
         $database = new Database(
-            "db",
-            "db",
-            "db",
-            "db",
+            host: getenv("MYSQL_HOST"),
+            username: getenv("MYSQL_USERNAME"),
+            password: getenv("MYSQL_PASSWORD"),
+            database: getenv("MYSQL_DATABASE"),
+            port: intval(getenv("MYSQL_PORT")) ?? 3306,
         );
 
         try {
